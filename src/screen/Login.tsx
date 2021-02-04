@@ -68,8 +68,8 @@ const Login: NavigationFunctionComponent = () => {
       <Button
         title="Sign In"
         onPress={async () => {
-          await signIn();
-          setRoot('App');
+          const result = await signIn();
+          if (result) setRoot('App');
         }}
       />
     </SafeAreaView>

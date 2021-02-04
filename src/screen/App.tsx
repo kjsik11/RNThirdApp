@@ -27,15 +27,43 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import { API_URL } from '../defines';
+import { fetchWidthToken } from '../lib/fetcher';
+import getRfreshToken from '../lib/getRefreshToken';
 import handleSignOut from '../lib/handleSignOut';
 
 const App = () => {
   const { setRoot } = useNavigation();
 
+  const handleFetch = async () => {
+    const refreshToken = await getRfreshToken();
+    // console.log('[rtoken]', refreshToken);
+    try {
+      fetchWidthToken(`${API_URL}/auth`, {
+        headers: {
+          accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        method: 'PUT',
+        body: JSON.stringify({
+          refreshToken,
+        }),
+      });
+    } catch (err) {
+      console.log('error: ', err);
+    }
+  };
+
   return (
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
+        <Button
+          title="fetcher test"
+          onPress={async () => {
+            handleFetch();
+          }}
+        />
         <Button
           title="Sign Out"
           onPress={async () => {

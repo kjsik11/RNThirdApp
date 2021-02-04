@@ -1,14 +1,14 @@
 import { API_URL } from '../defines';
+import fetcher from './fetcher';
 import renewToken from './renewToken';
 
 const checkToken = async () => {
-  const response = await fetch(`${API_URL}/auth`, {
+  const { error, userId } = await fetcher(`${API_URL}/auth`, {
     headers: {
-      Authorization: 'Bearer ' + (await renewToken()),
+      Authorization: `Bearer ${await renewToken()}`,
     },
     method: 'GET',
   });
-  const { error, userId } = await response.json();
 
   if (error) {
     const err = new Error(`[checkToken]:${error.message}`);
